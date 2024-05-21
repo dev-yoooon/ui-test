@@ -9,16 +9,54 @@
 
     <style>
         table {border-collapse: collapse;}
-        .tfoot{position: relative;transform: translateZ(1px);}
-        .tfoot::before{content: '';display: block;position: absolute;left: 0;top: 0;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;width:100%;height:100%}
-        /* tfoot tr:last-child td,
-        tfoot tr:last-child th {background-color: cadetblue;}
-        tfoot tr:last-child th {border-radius: 5px 0 0 5px;}
-        tfoot tr:last-child td:last-child {border-radius: 0 5px 5px 0;} */
-        .tfoot{}
+        .table1 .tfoot{position: relative;transform: translateZ(1px);}
+        .table1 .tfoot::before{content: '';display: block;position: absolute;left: 0;top: 0;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;}
+        .table2 .tfoot td,
+        .table2 .tfoot th {background-color: cadetblue;}
+        .table2 .tfoot th {border-radius: 5px 0 0 5px;}
+        .table2 .tfoot td:last-child {border-radius: 0 5px 5px 0;}
     </style>
 
-    <table>
+    <table class="table1">
+        <thead>
+            <tr>
+                <th>head</th>
+                <th>head</th>
+                <th>head</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>td foot</td>
+                <td>td foot</td>
+                <td>td foot</td>
+            </tr>
+            <tr class="tfoot">
+                <th>foot</th>
+                <td>td foot</td>
+                <td>td foot</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table class="table2">
         <thead>
             <tr>
                 <th>head</th>
