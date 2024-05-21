@@ -8,8 +8,13 @@
 <body>
 
     <style>
+        table {border-collapse: collapse;}
         tfoot th{position: relative;}
-        tfoot th::before{content: '';display: block;position: absolute;left: 0;top: 0;width:100%;height:100%;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;}
+        /* tfoot th::before{content: '';display: block;position: absolute;left: 0;top: 0;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;} */
+        tfoot tr:last-child td,
+        tfoot tr:last-child th {background-color: cadetblue;}
+        tfoot tr:last-child th {border-radius: 5px 0 0 5px;}
+        tfoot tr:last-child td:last-child {border-radius: 0 5px 5px 0;}
     </style>
 
     <table>
@@ -43,7 +48,7 @@
                 <td>td foot</td>
                 <td>td foot</td>
             </tr>
-            <tr>
+            <tr class="tfoot">
                 <th>foot</th>
                 <td>td foot</td>
                 <td>td foot</td>
