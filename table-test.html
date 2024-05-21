@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <style>
+        tfoot th{position: relative;}
+        tfoot th::before{content: '';display: block;position: absolute;left: 0;top: 0;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;}
+    </style>
+
+    <table>
+        <thead>
+            <tr>
+                <th>head</th>
+                <th>head</th>
+                <th>head</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+            <tr>
+                <td>body</td>
+                <td>body</td>
+                <td>body</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>td foot</td>
+                <td>td foot</td>
+                <td>td foot</td>
+            </tr>
+            <tr>
+                <th>foot</th>
+                <td>td foot</td>
+                <td>td foot</td>
+            </tr>
+        </tfoot>
+    </table>
+    
+</body>
+</html>
