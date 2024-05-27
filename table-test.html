@@ -4,96 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://m.directdb.co.kr/static/css/ui-common.css?v=1.0.6.468">
+    <link rel="stylesheet" href="https://m.directdb.co.kr/static/css/ui-content.css?v=1.0.6.468">
 </head>
 <body>
 
     <style>
-        table {border-collapse: collapse;}
-        .table1 .tfoot{position: relative;transform: translateZ(1px) scale(1);}
-        .table1 .tfoot::before{content: '';display: block;position: absolute;left: 0;top: 0;width:100%;height: 100%;background-color: rgba(0,0,0,.2); border: 1px solid gray;border-radius: 10px;}
-        .table2 .tfoot td,
-        .table2 .tfoot th {background-color: cadetblue;border: 2px solid rgb(5, 68, 68)}
-        .table2 .tfoot th {border-radius: 5px 0 0 5px;}
-        .table2 .tfoot td:last-child {border-radius: 0 5px 5px 0;}
+        .terms-wrap.long-terms .ex-group .table tfoot .green-box::after {display: none;}
+        .terms-wrap.long-terms .ex-group .table tfoot .green-box th, 
+        .terms-wrap.long-terms .ex-group .table tfoot .green-box td {background-color: #f1fbf5;border: .1rem solid #1f9e49;}
+        .terms-wrap.long-terms .ex-group .table tfoot .green-box th:first-child{border-radius: 8px 0 0 8px;border-right: 0;}
+        .terms-wrap.long-terms .ex-group .table tfoot .green-box td:last-child{border-radius: 0 8px 8px 0; border-left: 0}
     </style>
 
-    <table class="table1">
-        <thead>
-            <tr>
-                <th>head</th>
-                <th>head</th>
-                <th>head</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>td foot</td>
-                <td>td foot</td>
-                <td>td foot</td>
-            </tr>
-            <tr class="tfoot">
-                <th>foot</th>
-                <td>td foot</td>
-                <td>td foot</td>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="table">
+        <table>
+            <caption class="blind">가입기준 남자의 가입예시에 대한 보장담보, 가입금액, 보험료를 설명한 표</caption>
+            <colgroup>
+                <col style="width: auto">
+                <col style="width: 30%">
+                <col style="width: 30%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th scope="col">보장담보</th>
+                    <th scope="col">가입금액</th>
+                    <th scope="col">보험료</th>
+                </tr>
+            </thead>
 
-    <table class="table2">
-        <thead>
-            <tr>
-                <th>head</th>
-                <th>head</th>
-                <th>head</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-            <tr>
-                <td>body</td>
-                <td>body</td>
-                <td>body</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>td foot</td>
-                <td>td foot</td>
-                <td>td foot</td>
-            </tr>
-            <tr class="tfoot">
-                <th>foot</th>
-                <td>td foot</td>
-                <td>td foot</td>
-            </tr>
-        </tfoot>
-    </table>
+            <tbody>
+                <tr>
+                    <td class="al-l">교통상해후유장해(3~100%)</td>
+                    <td class="al-r">1백만원</td>
+                    <td class="al-r">12원</td>
+                </tr>
+                <!-- 2404 상품안내 콘텐츠 -->
+                <tr>
+                    <td class="al-l">자가용운전자 교통사고처리지원금Ⅱ(비탑승중포함)(실손)</td>
+                    <td class="al-r">2억원</td>
+                    <td class="al-r">3,585원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자가용운전자 교통사고처리지원금Ⅵ(중대법규위반,6주미만)(실손)</td>
+                    <td class="al-r">1천만원</td>
+                    <td class="al-r">1,241원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고변호사선임비용(특정사고경찰조사포함Ⅱ)(비탑승중포함)(실손)</td>
+                    <td class="al-r">5천만원</td>
+                    <td class="al-r">520원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고벌금(비탑승중포함)(실손)</td>
+                    <td class="al-r">3천만원</td>
+                    <td class="al-r">212원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고벌금(대물, 실손)</td>
+                    <td class="al-r">1백만원</td>
+                    <td class="al-r">19원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">교통상해사망</td>
+                    <td class="al-r">1천만원</td>
+                    <td class="al-r">270원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">교통상해80%이상후유장해(최초1회한)</td>
+                    <td class="al-r">1천만원</td>
+                    <td class="al-r">23원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">교통상해80%이상후유장해연금(매월10년간지급)</td>
+                    <td class="al-r">월 50만원 (10년)</td>
+                    <td class="al-r">120원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">골절진단비(치아제외)</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">290원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">5대골절진단비</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">33원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">골절수술비(동일사고당1회지급)</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">79원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">5대골절수술비(동일사고당 1회지급)</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">8원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">골절철심제거수술비(연간1회한)</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">43원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">깁스치료비</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">60원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차부상치료비Ⅱ</td>
+                    <td class="al-r">8백만원</td>
+                    <td class="al-r">1,862원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">낙하물 및 로드킬사고 부상치료비(1-10급, 자가용 운전자용)</td>
+                    <td class="al-r">1백만원</td>
+                    <td class="al-r">2원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고성형수술비</td>
+                    <td class="al-r">1백만원</td>
+                    <td class="al-r">14원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고치아보철지원금</td>
+                    <td class="al-r">10만원</td>
+                    <td class="al-r">33원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">자동차사고 입원일당(1-14급, 1일이상180일한도)</td>
+                    <td class="al-r">7만원</td>
+                    <td class="al-r">648원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">응급실내원보험금(응급환자)(상해)</td>
+                    <td class="al-r">2만원</td>
+                    <td class="al-r">92원</td>
+                </tr>
+                <tr>
+                    <td class="al-l">응급실내원보험금(응급환자)(연간12회한)(상해)</td>
+                    <td class="al-r">1만원</td>
+                    <td class="al-r">46원</td>
+                </tr>
+                <!-- //2404 상품안내 콘텐츠 -->
+            </tbody>
+            <tfoot>
+                <tr class="blank">
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+                <tr>
+                    <th scope="col" class="al-l">보장보험료</th>
+                    <td class="al-r" colspan="2">9,212원</td><!-- 2404 상품안내 콘텐츠 -->
+                </tr>
+                <tr>
+                    <th scope="col" class="al-l">적립보험료</th>
+                    <td class="al-r" colspan="2">488원</td><!-- 2404 상품안내 콘텐츠 -->
+                </tr>
+                <tr class="green-box">
+                    <th scope="col" class="al-l">합계 보험료</th>
+                    <td class="al-r" colspan="2"><em>9,700</em>원</td><!-- 2404 상품안내 콘텐츠 -->
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     
 </body>
 </html>
