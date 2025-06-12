@@ -6,6 +6,10 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://m.directdb.co.kr/static/css/ui-common.css?v=1.0.6.468">
     <link rel="stylesheet" href="https://m.directdb.co.kr/static/css/ui-content.css?v=1.0.6.468">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.min.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 <body>
 
@@ -15,7 +19,49 @@
         .terms-wrap.long-terms .ex-group .table tfoot .green-box td {background-color: #f1fbf5;border: .1rem solid #1f9e49;}
         .terms-wrap.long-terms .ex-group .table tfoot .green-box th:first-child{border-radius: 8px 0 0 8px;border-right: 0;}
         .terms-wrap.long-terms .ex-group .table tfoot .green-box td:last-child{border-radius: 0 8px 8px 0; border-left: 0}
+        .swiper-slide{position: relative;}
+        .swiper-slide img{width: 100%}
+        .toast-test{position:absolute;z-index: 2;top: 0;left: 50%;width: 100px;transform: translateX(50%);}
     </style>
+
+    <div>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="toast-test">
+                
+                </div>
+                <img src="https://picsum.photos/200/300?random=1" alt="">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://picsum.photos/200/300?random=1" alt="">
+            </div>
+            <div class="swiper-slide">
+                <img src="https://picsum.photos/200/300?random=1" alt="">
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+            const swiper = new Swiper('.swiper-container', {
+            loop: true,
+                // autoplay: {
+                //   delay: 3000
+                // }
+            })
+            
+            const toast = bodymovin.loadAnimation({
+                container : document.querySelector('.toast-test'),
+                renderer: 'svg',
+                loop: true,
+                autoplay: true, 
+                path: './lottie-test.json'
+            })
+        });
+    </script>
+
 
     <div class="terms-wrap long-terms">
             <section class="ex-group">
