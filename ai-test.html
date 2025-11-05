@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>펫 AI 위젯 — 이름 감정분석 & 성격 테스트</title>
+
+  <!-- ml5.js CDN (무료, 클라이언트 사이드 머신러닝) -->
+  <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
+
+
+  <style>
+    :root{
+      --bg:#fdfaf6; --card:#ffffff; --accent:#ff914d; --muted:#556;
+      --success:#0f9d58;
+    }
+    body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;
+         background:var(--bg); color:var(--muted); margin:0; padding:24px;}
+    .wrap{max-width:940px;margin:0 auto;}
+    h1{margin:0 0 18px 0; color:var(--accent);}
+    .tabs{display:flex; gap:8px; margin-bottom:18px;}
+    .tab{background:var(--card); padding:10px 14px; border-radius:8px; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+    .tab.active{background: var(--accent);color: #fff;font-weight: bold;}
+    .card{background:var(--card); padding:18px; border-radius:10px; box-shadow:0 6px 18px rgba(16,24,40,0.06);}
+    label{display:block;margin:12px 0 15px;font-weight:600;color:#334}
+    input[type=text], textarea, select{width:100%;box-sizing: border-box;padding:10px;border:1px solid rgba(255,145,77,0.4);border-radius:8px;font-size:15px;background-color: rgba(255,145,77,0.05);}
+    input[type=text]:focus-visible{outline-color: var(--accent);}
+    button{background:var(--accent); color:#fff; border:none; padding:10px 14px;border-radius:8px; cursor:pointer;}
+    .result{margin-top:12px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#f0f7ff, #ffffff);border:1px solid #e6f0ff}
+    .score{font-weight:700;color:var(--accent); font-size:18px}
+    .mini{font-size:13px;color:#6b7280}
+    .traits{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+    .tag{background:#eef6ff;padding:6px 8px;border-radius:999px;font-weight:600;color:var(--accent);font-size:13px}
+    .compare{margin-top:8px;font-size:14px}
+    .share{margin-top:10px; display:flex; gap:8px}
+    .hint{font-size:13px;color:#7b8794;margin-top:6px}
+    .question{padding:10px 0; border-bottom:1px dashed #eef3fb}
+    .summary{margin-top:10px;padding:12px;border-radius:8px;background:#fff9f0;border:1px solid #fff2e6}
+    @media(max-width:640px){ .tabs{flex-wrap:wrap} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🐾이름 감정분석 & 성격 테스트</h1>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="name">이름 감정분석</div>
+      <div class="tab" data-tab="test">성격테스트</div>
+    </div>
+
+    <div id="name" class="card panel">
+      <label for="petName">🐾반려동물 이름을 입력하세요</label>
+      <input id="petName" type="text" placeholder="예: 뽀삐, 쿠키, 보리..." />
+      <div style="display:flex; gap:8px; margin-top:10px">
+        <button id="analyzeBtn">분석하기</button>
+        <button id="clearNameBtn" style="background:#e6eefb;color:var(--accent)">지우기</button>
+      </div>
+      <div id="loadingModel" class="hint" style="display:none">모델 로딩 중... 잠시만요.</div>
+      <div id="nameResult" class="result" style="display:none"></div>
+      <div class="hint">※ 감정 분석은 이름 텍스트를 기반으로 한 '언어적 신호'와 규칙 기반 특성(길이, 철자 등)을 조합해 생성합니다. 서버나 DB는 사용하지 않습니다.</div>
+    </div>
+
+    <div id="test" class="card panel" style="display:none; margin-top:14px">
+      <label>1. 평소 활동량은 어떤가요?</label>
+      <div class="question">
+        <label><input type="radio" name="q1" value="2" checked> 매우 활발하다</label>
+        <label><input type="radio" name="q1" value="1"> 보통이다</label>
+        <label><input type="radio" name="q1" value="0"> 조용한 편이다</label>
+      </div>
+
+      <label>2. 겁이 많거나 낯을 가리나요?</label>
+      <div class="question">
+        <label><input type="radio" name="q2" value="0" checked> 전혀 아니다</label>
+        <label><input type="radio" name="q2" value="1"> 가끔 그렇다</label>
+        <label><input type="radio" name="q2" value="2"> 매우 그렇다</label>
+      </div>
+
+      <label>3. 장난감이나 물건을 물어뜯는 편인가요?</label>
+      <div class="question">
+        <label><input type="radio" name="q3" value="2" checked> 자주 물어뜯음</label>
+        <label><input type="radio" name="q3" value="1"> 가끔 있음</label>
+        <label><input type="radio" name="q3" value="0"> 거의 안그렇다</label>
+      </div>
+
+      <label>4. 바깥 활동(산책, 외출)을 자주 하나요?</label>
+      <div class="question">
+        <label><input type="radio" name="q4" value="2" checked> 매일 산책/외출</label>
+        <label><input type="radio" name="q4" value="1"> 주 2-3회</label>
+        <label><input type="radio" name="q4" value="0"> 거의 안함</label>
+      </div>
+
+      <label>5. 사회성(다른 사람/동물과의 친화성)은 어떤가요?</label>
+      <div class="question">
+        <label><input type="radio" name="q5" value="2" checked> 매우 친화적</label>
+        <label><input type="radio" name="q5" value="1"> 보통</label>
+        <label><input type="radio" name="q5" value="0"> 소심함</label>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:12px">
+        <button id="submitTest">결과 보기</button>
+        <button id="resetTest" style="background:#e6eefb;color:var(--accent)">다시</button>
+      </div>
+
+      <div id="testResult" style="display:none" class="result"></div>
+      <div class="hint">※ 모든 계산은 브라우저에서만 처리됩니다. 결과는 보험 추천의 참고용 텍스트이며, 실제 보장 선택은 약관 확인이 필요합니다.</div>
+    </div>
+
+  </div>
+
+  <script>
+  /* -------------------------
+     탭 기능
+     ------------------------- */
+  document.querySelectorAll('.tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const which = t.dataset.tab;
+      document.querySelectorAll('.panel').forEach(p=>p.style.display = (p.id===which? 'block':'none'));
+    });
+  });
+
+  /* -------------------------
+     Name Sentiment — ml5 sentiment 사용 (로컬, 브라우저)
+     - ml5.sentiment('movieReviews') 모델을 사용해 텍스트의 정서적 점수(0~1)를 얻음
+     - 이름이 짧아 ML 점수가 낮거나 불확실할 수 있으므로 규칙기반 보정 적용
+     ------------------------- */
+  let sentimentModel = null;
+  const loadingEl = document.getElementById('loadingModel');
+
+  function loadSentiment(){
+    if(sentimentModel) return;
+    loadingEl.style.display = 'block';
+    // ml5 sentiment 로드 (사전학습된 movieReviews)
+    ml5.sentiment('movieReviews')
+      .then(mod => {
+        sentimentModel = mod;
+        loadingEl.style.display = 'none';
+      })
+      .catch(err=>{
+        console.error('모델 로드 실패', err);
+        loadingEl.textContent = '모델 로드 실패 — 로컬 규칙만 사용합니다.';
+      });
+  }
+
+  // 시작 시 로드 시도 (비동기지만 모델 없어도 규칙형으로 작동)
+  loadSentiment();
+
+  function ruleBasedAnalysis(name){
+    const n = (name||'').trim();
+    const len = n.length;
+    const vowels = (n.match(/[aeiouyㅏ-ㅣ]/ig) || []).length;
+    const endsWithY = /[yY]$/.test(n);
+    const playfulScore = Math.min(1, (len<=3?0.9: (len<=5?0.7:0.45)) + (endsWithY?0.15:0));
+    const softScore = Math.min(1, vowels/Math.max(1,len) + (len<=3?0.1:0));
+    const uniqueness = n.split('').filter((c,i,arr)=>arr.indexOf(c)===i).length / Math.max(1,len);
+    return {
+      playful: Math.round(playfulScore*100),
+      soft: Math.round(softScore*100),
+      uniqueness: Math.round(uniqueness*100),
+      note: (len<=2? '매우 짧은 이름은 발음에 에너지(발랄함)를 준다':'')
+    };
+  }
+
+  function combineScores(mlScore, rules){
+    // mlScore: 0..1 -> negative..positive (pos = 0.5+). For names we interpret:
+    // >0.6 => 긍정/밝음, 0.45-0.6 => 중립, <0.45 => 차분한/진중
+    let moodLabel, moodEmoji;
+    if(mlScore >= 0.6){ moodLabel='밝고 활발한 이름'; moodEmoji='😊'; }
+    else if(mlScore >= 0.45){ moodLabel='중립적인 이름'; moodEmoji='😌'; }
+    else { moodLabel='차분하거나 진중한 이름'; moodEmoji='😁'; }
+
+    // 보정: 규칙 기반 playful 높으면 활발로 조금 더 기울임
+    const adj = (rules.playful/100 - 0.5) * 0.4;
+    const adjustedScore = Math.max(0, Math.min(1, mlScore + adj));
+    return {moodLabel, moodEmoji, adjustedScore};
+  }
+
+  document.getElementById('analyzeBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('petName').value.trim();
+    const resultBox = document.getElementById('nameResult');
+    resultBox.style.display='none';
+    if(!name){ alert('이름을 입력해 주세요.'); return; }
+
+    // 규칙 분석 먼저
+    const rules = ruleBasedAnalysis(name);
+
+    let mlScore = null;
+    if(sentimentModel){
+      try{
+        // 모델은 기본적으로 영화리뷰 감성 (0..1). 이름은 짧아 예측이 약할 수 있음.
+        const pred = sentimentModel.predict(name);
+        mlScore = pred.score ?? pred; // ml5 형식 대응
+      }catch(e){
+        console.warn('ml prediction failed', e);
+      }
+    }
+
+    let mood;
+    if(mlScore !== null){
+      mood = combineScores(mlScore, rules);
+    } else {
+      // 모델 없으면 규칙 기반으로 추정
+      const approx = rules.playful/100;
+      mood = { moodLabel: approx>0.6? '밝고 활발한 이름':'중립/차분한 이름', moodEmoji: approx>0.6?'😊':'😌', adjustedScore: approx };
+    }
+
+    // 추천 텍스트 생성 (간단한 AI같은 문장 조합)
+    const lines = [];
+    lines.push(`<div style="font-size:16px"><span class="score">${mood.moodEmoji} ${mood.moodLabel}</span></div>`);
+    lines.push(`<div class="mini">언어 기반 점수(0~100): <strong>${Math.round((mood.adjustedScore||0)*100)}</strong></div>`);
+    lines.push(`<div class="traits">`);
+    lines.push(`<div class="tag">발랄:${rules.playful}%</div>`);
+    lines.push(`<div class="tag">부드러움:${rules.soft}%</div>`);
+    lines.push(`<div class="tag">독창성:${rules.uniqueness}%</div>`);
+    lines.push(`</div>`);
+
+    // 보험 관련 짧은 권장
+    const recs = [];
+    if(rules.playful >= 70 || mood.adjustedScore >= 0.65){
+      recs.push('활동량이 높은 반려동물은 외상·상해 보장(예: 사고치료)이 중요합니다.');
+    }
+    if(rules.uniqueness <= 40){
+      recs.push('이름이 흔하면 분실 시 식별 태그/마이크로칩 등록을 권장합니다.');
+    }
+    if(rules.playful <= 45 && mood.adjustedScore < 0.5){
+      recs.push('차분한 성향은 만성·내과 치료 보장(예방검진 포함)을 체크하세요.');
+    }
+
+    lines.push(`<div class="compare"><strong>보험 팁</strong><div class="mini">${recs.join(' / ') || '일반 보장(상해·질병) 확인을 권장합니다.'}</div></div>`);
+    lines.push(`<div style="margin-top:10px"><button id="copyNameResult" style="background:${'var(--success)'}">결과 복사</button> <button id="shareName" style="background:#e6eefb;color:var(--accent)">SNS용 텍스트 생성</button></div>`);
+
+    resultBox.innerHTML = lines.join('');
+    resultBox.style.display='block';
+
+    // 복사 버튼 이벤트 (동적으로 추가됨)
+    document.getElementById('copyNameResult').addEventListener('click', ()=>{
+      const text = `${name} — ${mood.moodLabel} (${Math.round((mood.adjustedScore||0)*100)})\n추천: ${recs.join(' / ') || '일반 보장 확인'}`;
+      navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text).then(()=>alert('복사되었습니다')) : alert('복사 실패');
+    });
+
+    document.getElementById('shareName').addEventListener('click', ()=>{
+      const shareText = `우리 집 펫 이름 ${name}는 ${mood.moodLabel}래요 ${mood.moodEmoji} #반려동물 #펫이름`;
+      // 간단한 공유 팝업 (웹 공유 API가 없으면 클립보드로 복사)
+      if(navigator.share){
+        navigator.share({text: shareText}).catch(()=>navigator.clipboard.writeText(shareText));
+      } else {
+        navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(shareText).then(()=>alert('공유 문구가 복사되었습니다.')) : alert(shareText);
+      }
+    });
+  });
+
+  document.getElementById('clearNameBtn').addEventListener('click', ()=>{
+    document.getElementById('petName').value='';
+    document.getElementById('nameResult').style.display='none';
+  });
+
+  /* -------------------------
+     Personality Test (규칙 기반)
+     ------------------------- */
+  function gatherAnswers(){
+    const q = [];
+    for(let i=1;i<=5;i++){
+      const val = document.querySelector(`input[name=q${i}]:checked`);
+      q.push(val? Number(val.value):0);
+    }
+    return q;
+  }
+
+  function interpretTest(scores){
+    // scores: array of five numeric 0/1/2
+    const total = scores.reduce((a,b)=>a+b,0);
+    // 주요 지표 계산 (간단)
+    const activity = (scores[0] + scores[3]) / 4; // 0..1
+    const anxiety = scores[1] / 2;
+    const chew = scores[2] / 2;
+    const social = scores[4] / 2;
+
+    // 추천 보장 조합 (규칙)
+    const recommendations = [];
+    if(activity >= 0.6 || chew >= 0.6){
+      recommendations.push('운동 중 외상/골절 보장(사고치료) 추천');
+    }
+    if(chew >= 0.6){
+      recommendations.push('치과/구강 치료 보장 또는 물어뜯기 사고 관련 보장 확인');
+    }
+    if(anxiety >= 0.6 || social < 0.4){
+      recommendations.push('스트레스 관련 행동치료·진단비용 확인 권장');
+    }
+    if(recommendations.length===0) recommendations.push('기본 상해·질병 보장 중심으로 검토');
+
+    // 간단 텍스트 생성 (AI처럼 보이는 문장 합성)
+    const personalityLabel = activity>0.6 ? '활발형' : (activity>0.35 ? '균형형' : '차분형');
+    const short = `성향: ${personalityLabel} · 사회성:${Math.round(social*100)}% · 불안:${Math.round(anxiety*100)}% · 씹음 위험:${Math.round(chew*100)}%`;
+    return {personalityLabel, short, recommendations, activity, anxiety, chew, social};
+  }
+
+  document.getElementById('submitTest').addEventListener('click', ()=>{
+    const answers = gatherAnswers();
+    const out = interpretTest(answers);
+    const box = document.getElementById('testResult');
+    box.style.display='block';
+
+    // 결과 문장 (친절한 톤 — 보험 관련 권장사항 포함)
+    const html = [];
+    html.push(`<div style="font-size:16px;font-weight:700">${out.personalityLabel} — 맞춤 요약</div>`);
+    html.push(`<div class="mini" style="margin-top:6px">${out.short}</div>`);
+    html.push(`<div class="summary"><strong>권장 보장</strong><div class="mini" style="margin-top:6px">${out.recommendations.join(' / ')}</div></div>`);
+    html.push(`<div style="margin-top:8px"><button id="copyTestResult" style="background:var(--accent)">요약 복사</button> <button id="saveNone" style="background:#e6eefb;color:var(--accent)">이미지로 공유</button></div>`);
+    box.innerHTML = html.join('');
+
+    document.getElementById('copyTestResult').addEventListener('click', ()=>{
+      const text = `${out.personalityLabel}\n${out.short}\n권장: ${out.recommendations.join(' / ')}`;
+      navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text).then(()=>alert('복사되었습니다')) : alert('복사 실패');
+    });
+
+    // "이미지로 공유"는 간단히 성능 상 스크린샷 권유 (no backend)
+    document.getElementById('saveNone').addEventListener('click', ()=>{
+      alert('브라우저의 스크린샷 기능을 사용해 결과를 저장하거나 공유하세요.');
+    });
+  });
+
+  document.getElementById('resetTest').addEventListener('click', ()=>{
+    for(let i=1;i<=5;i++){
+      const first = document.querySelector(`input[name=q${i}]`);
+      if(first) first.checked=true;
+    }
+    document.getElementById('testResult').style.display='none';
+  });
+
+  // Accessibility: Enter 키로 이름 분석
+  document.getElementById('petName').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){ document.getElementById('analyzeBtn').click(); }
+  });
+
+  </script>
+</body>
+</html>
